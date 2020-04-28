@@ -21,11 +21,6 @@ Value encoding used for representing the input.
 Crossover is applied by exchanging half of genes from two parents.
 Mutation is applied by randomly changing the values of randomly selected 
 predefined percent of genes from the parents chromosome.
-
-This project is implemented using Python 3.5 by Ahmed F. Gad.
-Contact info:
-ahmed.fawzy@ci.menofia.edu.eg
-https://www.linkedin.com/in/ahmedfgad/
 """
 
 def img2chromosome(img_arr):
@@ -39,6 +34,7 @@ def img2chromosome(img_arr):
                                newshape=(functools.reduce(operator.mul, 
                                                           img_arr.shape)))
     return chromosome
+
 
 def initial_population(img_shape, n_individuals=8):
     """
@@ -54,6 +50,7 @@ def initial_population(img_shape, n_individuals=8):
                                 functools.reduce(operator.mul, img_shape))*256
     return init_population
 
+
 def chromosome2img(chromosome, img_shape):
     """
     First step in GA is to represent the input in a sequence of characters.
@@ -62,6 +59,7 @@ def chromosome2img(chromosome, img_shape):
     """
     img_arr = numpy.reshape(a=chromosome, newshape=img_shape)
     return img_arr
+
 
 def fitness_fun(target_chrom, indiv_chrom):
     """
@@ -78,6 +76,7 @@ def fitness_fun(target_chrom, indiv_chrom):
     quality = numpy.sum(target_chrom) - quality
     return quality
 
+
 def cal_pop_fitness(target_chrom, pop):
     """
     This method calculates the fitness of all solutions in the population.
@@ -87,6 +86,7 @@ def cal_pop_fitness(target_chrom, pop):
         # Calling fitness_fun(...) to get the fitness of the current solution.
         qualities[indv_num] = fitness_fun(target_chrom, pop[indv_num, :])
     return qualities
+
 
 def select_mating_pool(pop, qualities, num_parents):
     """
@@ -106,6 +106,7 @@ def select_mating_pool(pop, qualities, num_parents):
         """
         qualities[max_qual_idx] = -1
     return parents
+
 
 def crossover(parents, img_shape, n_individuals=8):
     """
@@ -132,10 +133,13 @@ def crossover(parents, img_shape, n_individuals=8):
     new_population[0:parents.shape[0], :] = parents
 
 
-    # Getting how many offspring to be generated. If the population size is 8 and number of parents mating is 4, then number of offspring to be generated is 4.
+    # Getting how many offspring to be generated.
+    #If the population size is 8 and number of parents mating is 4, then number of offspring to be generated is 4.
     num_newly_generated = n_individuals-parents.shape[0]
+
     # Getting all possible permutations of the selected parents.
     parents_permutations = list(itertools.permutations(iterable=numpy.arange(0, parents.shape[0]), r=2))
+    y
     # Randomly selecting the parents permutations to generate the offspring.
     selected_permutations = random.sample(range(len(parents_permutations)), 
                                           num_newly_generated)
