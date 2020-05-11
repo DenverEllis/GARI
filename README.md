@@ -14,7 +14,7 @@ instructions apply to the C++ implementation only and is what was presented.
 
 and of course g++ and make (build-essential package should cover it)
 
-#to run:
+# to run:
 
 -   make
 -   ./polyGARI
