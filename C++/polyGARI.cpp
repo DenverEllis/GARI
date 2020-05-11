@@ -3,7 +3,9 @@
 
 // TODO: make a fitness function so the code is more readable.
 // TODO: see how to represent the fitness as a graph
+// TODO: write function to dump fitness data for graphing
 // TODO: support commandline args for generation count and input file
+// TODO: explore faster methods to calculate fitness
 
 
 /*------------------------------------------------------------------------------
@@ -184,6 +186,7 @@ void copy_surf_to(cairo_surface_t* surf, cairo_t* cr) {
 /*------------------------------------------------------------------------------
                        GENETIC ALGORITHM: MUTATION
 ------------------------------------------------------------------------------*/
+// All of the checks here is pretty slow, can I make this faster?
 void mutate_color(double roulette, double drastic, int mutated_polygon) {
   if(dna_test[mutated_polygon].color.a < 0.01 || roulette < 0.25) {
     if(drastic < 1) {
@@ -262,6 +265,7 @@ int get_difference(cairo_surface_t* test_surf, cairo_surface_t* goal_surf) {
   int difference = 0;
   int curr_fitness = 0;
 
+  // This is heavy, can I make this faster?
   for(int y = 0; y < HEIGHT; ++y) {
     for(int x = 0; x < WIDTH; ++x) {
       int pixel = (y * WIDTH * 4) + (x * 4);
@@ -356,28 +360,8 @@ static void genetic_algorithm(cairo_surface_t* pngsurf) {
     }
 
     teststep++;
-
-    #ifdef TIMELIMIT
-    struct timeval curr_time;
-    gettimeofday(&t, NULL);
-    if(curr_time.tv_sec - start.tv_sec > TIMELIMIT) {
-      printf("%0.6f\n", ((MAX_FITNESS-lowestdiff) / (float)MAX_FITNESS) * 100);
-
-      #ifdef DUMP
-      char filename[50];
-      sprintf(filename, "%d.data", getpid());
-      FILE* f = fopen(filename, "w");
-      fwrite(dna_best, sizeof(shape_t), NUM_POLYGONS, f);
-      fclose(f);
-      #endif
-
-      return;
-    }
-
-    #else
     if(teststep % 100 == 0) printf("Step = %d/%d\nFitness = %0.6f%%\n\n",
 				   beststep, teststep, ((MAX_FITNESS-lowestdiff) / (float)MAX_FITNESS) * 100);
-    #endif
 
 
     #ifdef SHOWWINDOW
